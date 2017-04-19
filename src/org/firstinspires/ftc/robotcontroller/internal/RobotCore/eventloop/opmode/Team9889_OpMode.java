@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.firstinspires.ftc.robotcontroller.RunOpModeSimulator;
 import org.firstinspires.ftc.robotcontroller.RunOpModeSimulator.State;
-import org.firstinspires.ftc.robotcontroller.RunOpModeSimulator;
 
 public abstract class Team9889_OpMode {
 	public double time = 0.0;

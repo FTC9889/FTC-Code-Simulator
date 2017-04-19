@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.robotcontroller;
 
-import javax.swing.JOptionPane;
-
 import org.firstinspires.ftc.robotcontroller.internal.RobotCore.eventloop.opmode.Team9889_OpMode.telemetry;
 import org.firstinspires.ftc.teamcode.Teleop;
-import org.firstinspires.ftc.teamcode.Autonomous.Modes.*;
 
 public class RunOpModeSimulator {
 	

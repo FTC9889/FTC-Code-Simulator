@@ -4,24 +4,10 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
-import javax.swing.JComponent;
-
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JSpinner;
-import javax.swing.JList;
-import java.beans.PropertyChangeListener;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.beans.PropertyChangeEvent;
 import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import javax.swing.event.ListSelectionListener;
-
 import org.firstinspires.ftc.robotcontroller.RunOpModeSimulator.State;
-
-import javax.swing.event.ListSelectionEvent;
 
 public class Test {
 
@@ -31,9 +17,6 @@ public class Test {
 	JButton btnNewButton_1;
 	JButton btnNewButton_2;
 	
-	
-	private static final int MYTHREADS = 30;
-
 	/**
 	 * 0 = Stopped
 	 * 1 = Initializing
@@ -147,7 +130,4 @@ public class Test {
 		
 	}
 	
-	public void loopingCheck(){
-		
-	}
 }

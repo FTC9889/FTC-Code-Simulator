@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.robotcontroller.internal.RobotCore.eventloop.opmode;
 
-import javax.swing.JOptionPane;
-
 import org.firstinspires.ftc.robotcontroller.Test;
 
 public abstract class Team9889_LinearOpMode {
