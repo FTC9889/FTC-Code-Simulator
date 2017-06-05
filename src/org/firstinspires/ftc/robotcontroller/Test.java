@@ -25,9 +25,7 @@ public class Test {
 	public int mode = 2;
 	public boolean isRunning = false;
 	private boolean first = true;
-	
-
-	
+		
 	/**
 	 * Launch the application.
 	 */

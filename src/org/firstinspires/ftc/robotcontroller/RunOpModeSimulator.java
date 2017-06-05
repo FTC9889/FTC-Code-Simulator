@@ -17,7 +17,6 @@ public class RunOpModeSimulator {
 	static Thread i1;
 	
 	public static void run(State i) {
-		// TODO Auto-generated method stub
 		if(i == State.init){
 			OpMode.init();
 		}else if(i == State.init_loop){
@@ -56,5 +55,4 @@ public class RunOpModeSimulator {
 			
 		}
 	}
-	
 }
