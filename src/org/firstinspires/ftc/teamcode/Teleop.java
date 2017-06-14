@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.robotcontroller.internal.RobotCore.eventloop.opmode.Team9889_OpMode;
+import org.firstinspires.ftc.robotcontroller.internal.RobotCore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
-public class Teleop extends Team9889_OpMode{
+public class Teleop extends OpMode{
 
 	public Drivetrain drivetrain = new Drivetrain();
 	public int AutonState = 0;

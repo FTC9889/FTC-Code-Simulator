@@ -10,6 +10,8 @@ public class DcMotor {
 	public double GearRatio = 1;
 	private double OutputGearboxRPM = 0;
 	
+	private double mPower = 0;
+	
 	public enum MotorType{
 		AndyMark60, AndyMark40, AndyMark20, AndyMark37, AndyMarkCustom, Tetrix
 	}
@@ -39,8 +41,12 @@ public class DcMotor {
 		System.out.print(OutputCounts + " Output Counts \n");
 	}
 	
-	public Object setPower(double power){
-		return null;
+	public void setPower(double Power){
+		mPower = Power;
+	}
+	
+	public double getPower(){
+		return mPower;
 	}
 
 	public DcMotor get(String string) {
