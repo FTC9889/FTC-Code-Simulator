@@ -1,11 +1,14 @@
 package com.qualcomm.robotcore.hardware;
 
-public class DcMotor extends HardwareDevice{
+import org.firstinspires.ftc.teamcode.subsystems.WindowMaker;
+
+public class DcMotor implements HardwareDevice {
 	
 	private double mpower = 0.0;
 	private int mtargetposition = 0;
 	private RunMode currentRunMode = RunMode.RUN_WITHOUT_ENCODER;
 	private ZeroPowerBehavior getZeroPowerBehavior = ZeroPowerBehavior.UNKNOWN;
+	private String DcMotorName = null;
 
 	public final void setPower(double power){
 		mpower = power;
@@ -139,6 +142,50 @@ public class DcMotor extends HardwareDevice{
 	
 	public final RunMode getMode(){
 		return currentRunMode;
+	}
+
+	public DcMotor get(String string) {
+		// TODO Auto-generated method stub
+		DcMotorName = string;
+		WindowMaker output = new WindowMaker(DcMotorName);
+		output.setVisible(true);
+		return null;
+	}
+
+	@Override
+	public Manufacturer getManufacturer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDeviceName() {
+		// TODO Auto-generated method stub
+		return DcMotorName;
+	}
+
+	@Override
+	public String getConnectionInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getVersion() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
+	@Override
+	public void resetDeviceConfigurationForOpMode() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
