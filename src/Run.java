@@ -1,46 +1,24 @@
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import org.firstinspires.ftc.robotcontroller.internal.RobotCore.eventloop.opmode.OpMode.telemetry;
-import org.firstinspires.ftc.teamcode.Teleop;
-
 public class Run {
 
-	private JFrame frame;
+	private JFrame DriverStation;
 	
-	JButton btnNewButton;
-	JButton btnNewButton_1;
-	JButton btnNewButton_2;
+	private JButton topButton;
+	private JButton bottomButton;
 	
+	private String nameInitOpMode = "Init OpMode";
+	private String nameStartOpMode = "Start OpMode";
+	private String nameStopOpMode = "Stop OpMode";
 	
-	private static final int MYTHREADS = 30;
-
-	/**
-	 * 0 = Stopped
-	 * 1 = Initializing
-	 * 2 = Running
-	 */
-	public int mode = 2;
-	public boolean isRunning = false;
-	private boolean first = true;
-	
-	public enum State{
-		init, init_loop, start, loop, stop
-	}
-
-	public static String s = null;
-	public static Object[] possibilities = {"TeleOp", "Autonomous1", "Autonomus2", "Autonomus3"};
-	public static Teleop OpMode = new Teleop();
-	
-	static Thread t;
-	static Thread i1;
-	
-
+	//check if the opMode is running
+	private boolean isRunning = false;
 	
 	/**
 	 * Launch the application.
@@ -49,131 +27,130 @@ public class Run {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Run window = new Run();
-					window.frame.setVisible(true);
+					Run start = new Run();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-		
 	}
 
 	/**
 	 * Create the application.
 	 */
-	public Run() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	public void initialize() {
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 134, 290);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public Run() {		
+		//Make the frame
+		DriverStation = new JFrame();
+		DriverStation.setResizable(false);
+		DriverStation.setBounds(10, 10, 90, 200);
+		DriverStation.getContentPane().setLayout(null);
+		DriverStation.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JButton btnNewButton = new JButton("Init");
-		btnNewButton.addKeyListener(new KeyAdapter() {
-			
-		});
-		btnNewButton.setBounds(10, 5, 106, 75);
-		btnNewButton.addActionListener(new ActionListener() {
+		JFrame DriverStationTelemetry = new JFrame();
+		DriverStationTelemetry.setResizable(false);
+		DriverStationTelemetry.setBounds(150, 150, 300, 5);
+		DriverStationTelemetry.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		DriverStationTelemetry.setVisible(true);
+		
+		//
+		//Top Button
+		//
+		topButton = new JButton(nameInitOpMode);
+		topButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.print("OpMode Initalized \n");
-				mode = 1;
-				OpmodeRunner(State.init);
-				OpmodeRunner(State.init_loop);
+				if(topButton.getText() == nameInitOpMode){
+					setOpModeState(OpModeStates.init);	
+				}else if(topButton.getText() == nameStopOpMode) {
+					setOpModeState(OpModeStates.stop);
+				}
 				
-				btnNewButton.setVisible(false);
-				btnNewButton_1.setVisible(true);
-				btnNewButton_2.setVisible(true);
-				isRunning = false;
+				//add switching logic for buttons
+				//make sure threads will work in this application
+				//check logic to inshore that it will work 
 			}
 		});
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(btnNewButton);
+		topButton.setBounds(10, 5, 115, 75);
+		DriverStation.getContentPane().add(topButton);
 		
-		btnNewButton_1 = new JButton("Stop OpMode");
-		btnNewButton_1.setBounds(10, 177, 106, 75);
-		btnNewButton_1.addActionListener(new ActionListener() {
+		//
+		//Bottom Button
+		//
+		bottomButton = new JButton(nameStartOpMode);
+		bottomButton.setVisible(false);
+		bottomButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				System.out.print("OpMode Stop \n");
-				mode = 0;
-				OpmodeRunner(State.stop);
-				isRunning = false;	
-				
-				btnNewButton.setVisible(true);
-				btnNewButton_1.setVisible(false);
-				btnNewButton_2.setVisible(false);
+				if(bottomButton.getText() == nameStartOpMode){
+					setOpModeState(OpModeStates.start);
+				}else if(bottomButton.getText() == nameStopOpMode) {
+					setOpModeState(OpModeStates.stop);
+				}
 			}
 		});
-		frame.getContentPane().add(btnNewButton_1);
-		
-		btnNewButton_2 = new JButton("Start OpMode");
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.print("OpMode Started \n");
-				mode = 2;
-				OpmodeRunner(State.start);
-				OpmodeRunner(State.loop);
-				btnNewButton.setVisible(false);
-				isRunning = false;
-			}
-		});
-		btnNewButton_2.setBounds(10, 91, 106, 75);
-		frame.getContentPane().add(btnNewButton_2);
-		
-		
-		if(first){
-			btnNewButton_1.setVisible(false);
-			btnNewButton_2.setVisible(false);
-			first = false;
+		bottomButton.setBounds(10, 91, 115, 75);
+		DriverStation.getContentPane().add(bottomButton);	
+		DriverStation.setVisible(true);
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void setOpModeState(OpModeStates state) {
+		switch(state) {
+		case preInit:
+			System.out.print("preInit\n");
+			isRunning = false;
+			break;
+		case init:
+			System.out.print("init\n");
+			topButton.setLabel(nameStopOpMode);
+			bottomButton.setLabel(nameStartOpMode);
+			
+			bottomButton.setVisible(true);
+			topButton.setVisible(true);
+			break;
+		case init_loop:
+			System.out.print("init_loop\n");
+			break;
+		case postInitLoop:
+			System.out.print("postInitLoop\n");
+			break;
+		case start:
+			System.out.print("start\n");
+			topButton.setLabel(nameInitOpMode);
+			bottomButton.setLabel(nameStopOpMode);
+			
+			topButton.setVisible(false);
+			bottomButton.setVisible(true);
+			isRunning = true;
+			break;
+		case loop:
+			System.out.print("loop\n");
+			checkOpModeThread();
+			isRunning = true;
+			break;
+		case postLoop:
+			System.out.print("postLoop\n");
+			isRunning = false;
+			break;
+		case stop:
+			System.out.print("stop\n");
+			topButton.setLabel(nameInitOpMode);
+			bottomButton.setLabel(nameStartOpMode);
+			
+			topButton.setVisible(true);
+			bottomButton.setVisible(false);
+			isRunning = false;
+			break;
 		}
+		
 		
 	}
 	
-	public void loopingCheck(){
-		
-	}
-		
-	public static void OpmodeRunner(State i) {
-		// TODO Auto-generated method stub
-		if(i == State.init){
-			OpMode.init();
-		}else if(i == State.init_loop){
-			i1 = new Thread(() -> {
-	            while (!Thread.interrupted()) {
-						OpMode.init_loop();// Not stuck anymore!
-	            }
-	        });
-	        i1.start();
-		}else if(i == State.start){
-			for(int l = 0; l < 100; l++){
-				telemetry.addData("start", "");
-				i1.interrupt();
-			}
-			OpMode.start();
-		}else if(i == State.loop){
-			t = new Thread(() -> {
-	            while (!Thread.interrupted()) {
-	            	OpMode.loop();// Not stuck anymore!
-	            }
-	        });
-	        t.start();
-		}else if(i == State.stop){	
-			OpMode.stop();
-			for(int l = 0; l < 100; l++){
-				telemetry.addData("stop", "");
-				t.interrupt();
-				i1.interrupt();
-			}
-						
-			telemetry.addData("OpMode Stopped", "");
-			
-		}
+	private enum OpModeStates{
+		preInit, init, init_loop, postInitLoop, start, loop, postLoop, stop
 	}
 
+	private void checkOpModeThread() {
+		
+	}
 }
