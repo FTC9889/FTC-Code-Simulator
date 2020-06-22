@@ -99,84 +99,86 @@ def angle_responce(current, wantedAngle):
     dAngle = error * 0.25
     return current + dAngle
 
-# Init pygame
-pygame.init()
-pygame.font.init()
-myfont = pygame.font.SysFont(None, 20)
-clock = pygame.time.Clock()
+def main():
 
-# Display
-DISPLAYSURF = pygame.display.set_mode((640, 800), 1, 32)
-pygame.display.set_caption('Cruise Planner')
+    # Init pygame
+    pygame.init()
+    pygame.font.init()
+    myfont = pygame.font.SysFont(None, 20)
+    clock = pygame.time.Clock()
 
-loadIcon(pygame)
+    # Display
+    DISPLAYSURF = pygame.display.set_mode((640, 800), 1, 32)
+    pygame.display.set_caption('Cruise Planner')
 
-fieldImg = pygame.image.load(getFromSettings('regularView'))
-fieldImg = pygame.transform.scale(fieldImg, (640, 640))
+    loadIcon(pygame)
 
-# Display Field Image
-DISPLAYSURF.blit(fieldImg, (0, 0))
+    fieldImg = pygame.image.load(getFromSettings('regularView'))
+    fieldImg = pygame.transform.scale(fieldImg, (640, 640))
 
-# Button for generating path
-buttonRect = pygame.Rect
-
-# Pixel Per Inch
-pixelPerInch = fieldImg.get_rect().size[0] / getFromSettings('fieldWidth')  
-
-outerRadiusOfRobot = int(0.5 * pixelPerInch * ((getFromSettings("robotWidth")**2 + getFromSettings("robotLength")**2)**0.5))
-
-# Points to drive too
-points = [[320,320], [320, 200], [200, 320], [430, 500]] # Inches
-angles = [0, 0, 90, 180] # Degrees
-
-currentPosition = [320, 320]
-currentAngle = 0
-
-running = True
-step = 0
-
-listOfPastCurrentPoints = [currentPosition]
-# Loop
-while running:
+    # Display Field Image
     DISPLAYSURF.blit(fieldImg, (0, 0))
-    pygame.draw.rect(DISPLAYSURF, (0,0,0), (0, 640, 640, 800))
 
-    for point in points:
-        pygame.draw.circle(DISPLAYSURF, (0,0,0), point, 6)
-        lastPoint = (point[0], point[1])
+    # Button for generating path
+    buttonRect = pygame.Rect
+
+    # Pixel Per Inch
+    pixelPerInch = fieldImg.get_rect().size[0] / getFromSettings('fieldWidth')  
+
+    outerRadiusOfRobot = int(0.5 * pixelPerInch * ((getFromSettings("robotWidth")**2 + getFromSettings("robotLength")**2)**0.5))
+
+    # Points to drive too
+    points = [[320,320], [320, 200], [200, 320], [430, 500]] # Inches
+    angles = [0, 0, 90, 180] # Degrees
+
+    currentPosition = [320, 320]
+    currentAngle = 0
+
+    running = True
+    step = 0
+
+    listOfPastCurrentPoints = [currentPosition]
+    # Loop
+    while running:
+        DISPLAYSURF.blit(fieldImg, (0, 0))
+        pygame.draw.rect(DISPLAYSURF, (0,0,0), (0, 640, 640, 800))
+
+        for point in points:
+            pygame.draw.circle(DISPLAYSURF, (0,0,0), point, 6)
+            lastPoint = (point[0], point[1])
 
 
-    currentAngle = angle_responce(currentAngle, angles[step])
-    epicRect(DISPLAYSURF, (0,0,0), currentPosition, getFromSettings("robotWidth")*pixelPerInch, getFromSettings("robotLength")*pixelPerInch, currentAngle)
-    
-    for currentPosition in listOfPastCurrentPoints:
-        pygame.draw.circle(DISPLAYSURF, (0,255,0), (currentPosition[0], currentPosition[1]), 3)
-    
-    if(changePointCondition(currentPosition, points[step], 20) and step<len(points)-1):
-        step += 1
-    
-    currentPosition = responce(currentPosition, points[step], currentAngle, 1/40, lastx_error, lasty_error)
-    pygame.draw.circle(DISPLAYSURF, (255,0,0), (currentPosition[0], currentPosition[1]), 6)
+        currentAngle = angle_responce(currentAngle, angles[step])
+        epicRect(DISPLAYSURF, (0,0,0), currentPosition, getFromSettings("robotWidth")*pixelPerInch, getFromSettings("robotLength")*pixelPerInch, currentAngle)
+        
+        for currentPosition in listOfPastCurrentPoints:
+            pygame.draw.circle(DISPLAYSURF, (0,255,0), (currentPosition[0], currentPosition[1]), 3)
+        
+        if(changePointCondition(currentPosition, points[step], 20) and step<len(points)-1):
+            step += 1
+        
+        currentPosition = responce(currentPosition, points[step], currentAngle, 1/40, lastx_error, lasty_error)
+        pygame.draw.circle(DISPLAYSURF, (255,0,0), (currentPosition[0], currentPosition[1]), 6)
 
-    if(not (currentPosition == listOfPastCurrentPoints[-1])):
-        listOfPastCurrentPoints.append(currentPosition)
+        if(not (currentPosition == listOfPastCurrentPoints[-1])):
+            listOfPastCurrentPoints.append(currentPosition)
 
-    # On Event
-    for event in pygame.event.get():
-        if event.type == MOUSEBUTTONDOWN:
-            currentPosition = [event.pos[0], event.pos[1]]
-        if event.type == QUIT: # Quit
-            pygame.quit()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                running = False
+        # On Event
+        for event in pygame.event.get():
+            if event.type == MOUSEBUTTONDOWN:
+                currentPosition = [event.pos[0], event.pos[1]]
+            if event.type == QUIT: # Quit
+                pygame.quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
 
-    #cap the framerate
-    clock.tick(10)
-    pygame.display.update()
+        #cap the framerate
+        clock.tick(10)
+        pygame.display.update()
 
-pygame.quit()
+    pygame.quit()
 
-if if __name__ == "__main__":
-    print("hey")
+if __name__ == "__main__":
+    main()
     pass

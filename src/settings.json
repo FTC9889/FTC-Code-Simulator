@@ -1,0 +1,9 @@
+{
+    "regularView": "RR2_above_view_of_field.PNG",
+    "fieldWidth": 144.0,
+    "fieldHeight": 144.0,
+    "robotWidth": 17.5,
+    "robotLength": 17.5,
+    "straightCommand": "runAction(new DriveToDistanceAndAngle(%d, %a));",
+    "turnCommand": "runAction(new Turn(%a));"
+}
